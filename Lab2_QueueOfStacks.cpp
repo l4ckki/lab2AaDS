@@ -114,6 +114,11 @@ int Push(Queue::Stack*& stack)
 
 int Pop(Queue::Stack*& stack)
 {   
+    if (!stack)
+    {
+        std::cout << "Стек пуст" << '\n';
+        return -1;
+    }
     Queue::Stack* temp = new Queue::Stack;
     
     temp = stack;
@@ -133,11 +138,14 @@ int PrintStack(Queue::Stack* stack)
 
     Queue::Stack* temp = stack;
 
+    std::cout << "Содержимое стека:";
     while (temp)
     {
-        std::cout << temp->key << '\n';
+        std::cout << ' ' << temp->key;
         temp = temp->next;
     }
+
+    std::cout << '\n';
 
     return 0;
 }
