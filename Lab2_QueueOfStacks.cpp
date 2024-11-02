@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <Windows.h>
-
+#include <string>
 
 
 struct Queue
@@ -33,10 +33,13 @@ bool ExitMenu();
 int ModeInput();
 void WorkWithQueueMenu(Queue*&, bool&);
 int PrintStack(Queue::Stack*);
+int Push(Queue::Stack*&);
 
 int Enqueue(Queue*& queue)
 {   
+    bool isPush = true;
     std::string name;
+    int mode;
     std::cout << "Введите название стека: " << '\n';
     std::cin >> name;
     if (queue->front == NULL)
@@ -44,6 +47,28 @@ int Enqueue(Queue*& queue)
         queue->front = new Queue;
         queue->front->stackName = name;
         queue->end = queue->front;
+        Queue::Stack* stack = queue->front->key;
+        while (isPush)
+        {   
+            std::cout << "Для ввода данных в стек, введите 1" << "\n";
+            std::cout << "Для прекращения ввода данных, введите 2" << "\n";
+            std::cin >> mode;
+            if (mode == 1)
+            {   
+                std::cout << "Введите данные для стека: " << "\n";
+                Push(stack);
+            }
+            else if(mode == 2)
+            {   
+                isPush = false;
+                queue->front->key = stack;
+                return 0;
+            }
+            else
+            {
+                std::cout << "Неверный код операции, повторите попытку" << "\n";
+            }
+        }
     }
     else
     {
@@ -51,8 +76,30 @@ int Enqueue(Queue*& queue)
         queue->end->next = newNode;
         newNode->stackName = name;
         queue->end = newNode;
+        Queue::Stack* stack = newNode->key;
+        while (isPush)
+        {
+            std::cout << "Для ввода данных в стек, введите 1" << "\n";
+            std::cout << "Для прекращения ввода данных, введите 2" << "\n";
+            std::cin >> mode;
+            if (mode == 1)
+            {
+                std::cout << "Введите данные для стека: " << "\n";
+                Push(stack);
+            }
+            else if (mode == 2)
+            {
+                isPush = false;
+                newNode->key = stack;
+                return 0;
+            }
+            else
+            {
+                std::cout << "Неверный код операции, повторите попытку" << "\n";
+            }
+        }
     }
-    
+
     return 0;
 }
 
@@ -77,7 +124,7 @@ int PrintQueue(Queue*& queue)
 {
     Queue* temp = queue->front;
 
-    while (temp)
+    while (temp != NULL)
     {
         std::cout << temp->stackName << ": ";
         PrintStack(temp->key);
@@ -114,11 +161,13 @@ int Push(Queue::Stack*& stack)
 
 int Pop(Queue::Stack*& stack)
 {   
-    if (!stack)
+    if (stack == NULL)
     {
         std::cout << "Стек пуст" << '\n';
+
         return -1;
     }
+
     Queue::Stack* temp = new Queue::Stack;
     
     temp = stack;
@@ -139,7 +188,7 @@ int PrintStack(Queue::Stack* stack)
     Queue::Stack* temp = stack;
 
     std::cout << "Содержимое стека:";
-    while (temp)
+    while (temp != NULL)
     {
         std::cout << ' ' << temp->key;
         temp = temp->next;
@@ -152,7 +201,7 @@ int PrintStack(Queue::Stack* stack)
 
 int ClearStack(Queue::Stack*& stack)
 {   
-    while (stack)
+    while (stack != NULL)
     {
         Queue::Stack* temp = stack;
         stack = stack->next;
@@ -225,6 +274,7 @@ void WorkWithStackMenu(Queue*& queue)
                 break;
             default:
                 std::cout << "Неверный ввод, введите цифру операции" << std::endl << std::endl;
+                break;
         }
     }
 }
@@ -271,6 +321,7 @@ void WorkWithQueueMenu(Queue*& queue, bool& isWork)
             break;
         default:
             std::cout << "Неверный ввод, введите цифру операции" << std::endl << std::endl;
+            break;
     }
 
 }
